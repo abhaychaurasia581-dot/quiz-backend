@@ -3,7 +3,26 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Question, Option
-from .serializers import QuestionSerializer, OptionSerializer
+from .serializers import QuestionSerializer, OptionSerializer,StudentSerializer
+from rest_framework.decorators import api_view
+from .models import Student
+
+
+
+
+@api_view(['GET', 'POST'])
+def student_list(request):
+    if request.method == 'GET':
+        students = Student.objects.all().order_by('-created_at')
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        serializer = StudentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

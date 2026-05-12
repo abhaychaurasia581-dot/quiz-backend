@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import Question, Option
+from .models import Question, Option,Student
 
 class OptionInline(admin.TabularInline):
     model = Option
@@ -10,3 +10,5 @@ class OptionInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [OptionInline]
     list_display = ['id', 'text', 'created_at']
+
+admin.site.register(Student) 
